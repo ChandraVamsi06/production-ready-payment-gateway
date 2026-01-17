@@ -1,0 +1,35 @@
+version: "1.0"
+project_name: "payment-gateway"
+
+# 1. Setup Phase: Builds the images from scratch
+setup:
+  commands:
+    - "docker-compose build --no-cache"
+
+# 2. Startup Phase: Boots up the stack
+start:
+  commands:
+    - "docker-compose up -d"
+  services:
+    - name: "api"
+      port: 8000
+      health_check: "curl -f http://localhost:8000/health || exit 1"
+    - name: "redis"
+      port: 6379
+    - name: "postgres"
+      port: 5432
+    - name: "worker"
+      check_command: "docker ps | grep gateway_worker"
+
+# 3. Testing Phase: The evaluator hits your endpoint
+test:
+  endpoints:
+    - path: "/api/v1/test/jobs/status"
+      method: "GET"
+      expected_status: 200
+
+# 4. Shutdown Phase: CLEANUP IS KEY
+shutdown:
+  commands:
+    - "docker-compose down -v" 
+    # The '-v' is crucial. It deletes the database volume so the next run starts fresh.
