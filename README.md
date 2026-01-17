@@ -2,32 +2,6 @@
 
 A robust, event-driven payment gateway implementation using **Node.js**, **Redis queues**, and **PostgreSQL**. Designed for high concurrency, fault tolerance, and scalability using a microservices architecture.
 
-## 🚀 Architecture
-
-This system uses an asynchronous, event-driven architecture to handle payments and notifications reliably.
-
-```mermaid
-graph TD
-    Client["Client / SDK"] -->|"1. POST /payments"| API["Node.js API"]
-    API -->|"2. Save 'Pending'"| DB[("PostgreSQL")]
-    API -->|"3. Enqueue Job"| Redis[("Redis Queue")]
-    
-    subgraph "Background Worker Service"
-        Worker["Worker Process"]
-    end
-    
-    Redis -->|"4. Pick up Job"| Worker
-    Worker -->|"5. Update Status 'Success'"| DB
-    
-    Worker -->|"6. Enqueue Webhook"| Redis
-    Redis -->|"7. Pick up Webhook Job"| Worker
-    Worker -->|"8. POST (HMAC Signed)"| Merchant["Merchant Server"]
-    
-    Merchant -.->|"9. 200 OK"| Worker
-    Merchant -.->|"9. Failed? Retry (Exp. Backoff)"| Worker
-
-```
-
 ## ✨ Key Features
 
 * **Asynchronous Processing:** Payments are offloaded to **BullMQ (Redis)** queues, preventing main-thread blocking during high loads.
