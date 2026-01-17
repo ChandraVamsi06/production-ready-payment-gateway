@@ -66,15 +66,15 @@ docker-compose up --build
 
 ### 3. Access the Services
 
-* **Merchant Dashboard:** [http://localhost:3000]
-* **Checkout Page:** [http://localhost:3000/checkout]
-* **API Health Check:** [http://localhost:8000/health]
+* **Merchant Dashboard:** [http://localhost:3000](https://www.google.com/search?q=http://localhost:3000)
+* **Checkout Page:** [http://localhost:3000/checkout](https://www.google.com/search?q=http://localhost:3000/checkout)
+* **API Health Check:** [http://localhost:8000/health](https://www.google.com/search?q=http://localhost:8000/health)
 
 ## 🧪 How to Test
 
 ### 1. Process a Payment
 
-1. Go to [http://localhost:3000/checkout].
+1. Go to [http://localhost:3000/checkout](https://www.google.com/search?q=http://localhost:3000/checkout).
 2. Click **"Pay Now"**.
 3. The request is sent to the API -> Queued in Redis -> Processed by Worker.
 4. You will see a "Payment Successful" screen.
@@ -87,6 +87,11 @@ docker-compose up --build
 4. Find a "Failed" log entry in the table and click **"Retry"**.
 5. Refresh the page after 5 seconds to see the status turn **Green (Success)**.
 
+### 3. Verify Job Queues
+
+The evaluator can check the health of the Redis queues via this endpoint:
+`GET http://localhost:8000/api/v1/test/jobs/status`
+
 ## 📚 API Documentation
 
 | Method | Endpoint | Description |
@@ -96,5 +101,3 @@ docker-compose up --build
 | `POST` | `/api/v1/payments/:id/refunds` | Initiate a partial/full refund |
 | `GET` | `/api/v1/webhooks` | List webhook logs |
 | `PUT` | `/api/v1/webhooks/settings` | Update merchant webhook URL |
-
----
